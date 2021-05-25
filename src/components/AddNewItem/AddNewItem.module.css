@@ -1,0 +1,15 @@
+.AppItemButton {
+  background-color: var(--slight-white-1);
+  border-radius: var(--border-radius-3px);
+  border: none;
+  cursor: pointer;
+  max-width: var(--card-width);
+  padding: 10px 12px;
+  text-align: left;
+  transition: background 85ms ease-in;
+  width: 100%;
+}
+
+.AppItemButton:hover {
+  background-color: var(--slight-white-2);
+}

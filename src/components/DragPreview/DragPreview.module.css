@@ -1,0 +1,11 @@
+.visible {
+  opacity: 1;
+}
+
+.slightVisible {
+  opacity: 0;
+}
+
+.rotate {
+  transform: rotate(5deg);
+}

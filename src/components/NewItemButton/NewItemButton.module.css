@@ -1,0 +1,9 @@
+.NewItemButton {
+  background-color: var(--create-button-colour);
+  border-radius: var(--border-radius-3px);
+  border: none;
+  box-shadow: none;
+  color: var(--white);
+  padding: 6px 12px;
+  text-align: center;
+}

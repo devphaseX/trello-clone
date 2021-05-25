@@ -1,0 +1,9 @@
+.Column {
+  background-color: var(--secondary-colour);
+  width: var(--card-width);
+  min-height: 40px;
+  margin-right: 2rem;
+  border-radius: 3px;
+  padding: 0.8rem;
+  flex-grow: 0;
+}
