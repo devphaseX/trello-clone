@@ -1,6 +1,6 @@
 import { nanoid } from 'nanoid';
-import type { Action } from './action';
-import { findItemIndexById, moveItem } from '../utils/arrayUtils';
+import { Action } from './action';
+import { findItemIndexById, moveItem, moveTaskTo } from '../utils/arrayUtils';
 
 interface AppStateReducer {
   (state: AppState, action: Action): AppState | void;
@@ -38,6 +38,63 @@ export const appStateReducer: AppStateReducer = (draft, action) => {
 
     case 'SET_DRAGGED_ITEM': {
       draft.draggedItem = action.payload;
+      if (action.payload === null) {
+        draft.hoveredColumn = null;
+      }
+
+      break;
+    }
+
+    case 'MOVE_TASK': {
+      const { draggedItemId, sourceColumnId, targetColumnId } = action.payload;
+      draft.draggedItem = {
+        id: draggedItemId,
+        type: 'CARD',
+        columnId: targetColumnId,
+        text: draft.draggedItem!.text,
+      };
+
+      const sourceColumn = findItemIndexById(draft.lists, sourceColumnId);
+      const targetColumn = findItemIndexById(draft.lists, targetColumnId);
+      const newlyHoveredColumnTasks = moveTaskTo(
+        { source: draft.lists[sourceColumn].tasks, itemId: draggedItemId },
+        draft.lists[targetColumn].tasks
+      );
+
+      draft.lists[targetColumn].tasks = newlyHoveredColumnTasks;
+      break;
+    }
+
+    case 'SWAP_TASK_POSITION': {
+      const { columnId, dragItemId, hoveredItemId } = action.payload;
+      const columnIdx = findItemIndexById(draft.lists, columnId);
+      const tasks = draft.lists[columnIdx].tasks;
+      const dragItemIdx = findItemIndexById(tasks, dragItemId);
+      const hoveredItemIdx = findItemIndexById(tasks, hoveredItemId);
+
+      draft.lists[columnIdx].tasks = moveItem(
+        tasks,
+        hoveredItemIdx,
+        dragItemIdx
+      );
+      break;
+    }
+
+    case 'SET_CURRENT_HOVERED_COLUMN': {
+      if (action.payload.draggedItem.type === 'CARD') {
+        if (
+          !draft.hoveredColumn ||
+          (draft.hoveredColumn &&
+            draft.hoveredColumn.id !== action.payload.columnId)
+        ) {
+          const hoveredColumn = findItemIndexById(
+            draft.lists,
+            action.payload.columnId
+          );
+          draft.hoveredColumn = draft.lists[hoveredColumn];
+        }
+      }
+
       break;
     }
     default: {

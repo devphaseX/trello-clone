@@ -13,11 +13,12 @@ declare global {
   interface List {
     id: string;
     text: string;
-    tasks: Task[];
+    tasks: Array<Task>;
   }
 
   interface AppState {
     lists: List[];
     draggedItem: DragItem | null;
+    hoveredColumn: List | null;
   }
 }

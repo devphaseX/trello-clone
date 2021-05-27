@@ -5,7 +5,3 @@
 .slightVisible {
   opacity: 0;
 }
-
-.rotate {
-  transform: rotate(5deg);
-}

@@ -1,12 +1,13 @@
 import { RefObject } from 'react';
 import { XYCoord } from 'react-dnd';
-import styled from 'styled-components';
+import { isString } from '../../utils/arrayUtils';
 import style from './DragPreview.module.css';
 
 export interface DragPreviewContainerProps {
   isHidden?: boolean;
   divRef?: RefObject<HTMLDivElement>;
   isPreview?: boolean;
+  importClassName?: string;
 }
 
 export const DragPreviewContainer: FC<DragPreviewContainerProps> = ({
@@ -14,12 +15,16 @@ export const DragPreviewContainer: FC<DragPreviewContainerProps> = ({
   isHidden,
   isPreview,
   divRef,
+  importClassName,
 }) => {
-  const className = style[!isHidden ? 'visible' : 'slightVisible'].concat(
-    isPreview ? ' rotate' : ''
-  );
+  const visibilityType = !isHidden ? 'visible' : 'slightVisible';
+  const classes = [style[visibilityType], importClassName]
+    .filter(isString)
+    .concat(isPreview ? 'rotate' : '')
+    .join(' ');
+
   return (
-    <div className={className} ref={divRef}>
+    <div className={classes} ref={divRef}>
       {children}
     </div>
   );

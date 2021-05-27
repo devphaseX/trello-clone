@@ -13,33 +13,34 @@ const appData: AppState = {
     {
       id: '1',
       text: 'In Progress',
-      tasks: [{ id: 'c2', text: 'Learn Typescript' }],
+      tasks: [{ id: 'c1', text: 'Learn Typescript' }],
     },
     {
       id: '2',
       text: 'Done',
-      tasks: [{ id: 'c3', text: 'Begin to use static typing' }],
+      tasks: [{ id: 'c2', text: 'Begin to use static typing' }],
     },
   ],
   draggedItem: null,
+  hoveredColumn: null,
 };
 
 type AppStateContextProps = AppState & {
-  getTasksByListId(id: string): Task[];
+  getTasksByListId(id: string): Array<Task>;
   dispatch: Dispatch<Action>;
 };
 
 const AppStateContext = createContext({} as AppStateContextProps);
 export const AppStateProvider: FC = ({ children }) => {
   const [state, dispatch] = useImmerReducer(appStateReducer, appData);
-  const { lists, draggedItem } = state;
+  const { lists, draggedItem, hoveredColumn } = state;
 
   const getTasksByListId: AppStateContextProps['getTasksByListId'] = (id) => {
     return lists.find((list) => list.id === id)?.tasks ?? [];
   };
   return (
     <AppStateContext.Provider
-      value={{ draggedItem, lists, getTasksByListId, dispatch }}
+      value={{ draggedItem, lists, getTasksByListId, dispatch, hoveredColumn }}
     >
       {children}
     </AppStateContext.Provider>
